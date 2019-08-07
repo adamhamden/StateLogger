@@ -24,6 +24,9 @@ class StateLogger:
 
         self.cursor = self.connection.cursor()
 
+    def __del__(self):
+        self.connection.commit()
+
 
     def _write(self, level, data, is_keep_local_copy=False):
         self.cursor.execute("CREATE TABLE IF NOT EXISTS log(timestamp INTEGER8 NOT NULL, robot_id INTEGER NOT NULL, log_level TEXT NOT NULL, data_type TEXT NOT NULL, data BLOB NOT NULL);")
@@ -127,10 +130,10 @@ class StateLogger:
 
 if __name__ == "__main__":
 
-    logger = StateLogger(4)
+    logger = StateLogger(4,'robot-4_1565195429906824448.db3')
     logger.info(2346.4655855)
     logger.fatal('this is a fatal message')
     logger.display_in_bound_data(10000,9999999999999999999)
     logger.display_fatal()
     logger.display_custom_condition("1==1")
-    logger._generate_pandas_data_frame("1==1")
+    print(logger._generate_pandas_data_frame("data_type != 'str'"))

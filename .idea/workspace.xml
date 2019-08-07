@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9e8947bf-87f1-4571-afcf-a9312849443d" name="Default Changelist" comment="" />
+    <list default="true" id="9e8947bf-87f1-4571-afcf-a9312849443d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/state_logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/state_logger.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,20 +28,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/state_logger.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-105">
-              <caret line="8" column="36" lean-forward="true" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+            <state relative-caret-position="457">
+              <caret line="135" column="57" selection-start-line="135" selection-start-column="57" selection-end-line="135" selection-end-column="57" />
               <folding>
                 <element signature="e#24#38#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/venv/lib/python3.5/site-packages/pandas/io/sql.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-249">
-              <caret line="255" column="4" selection-start-line="255" selection-start-column="4" selection-end-line="255" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -133,7 +127,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1242" height="1056" extended-state="4" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10336341" />
@@ -167,15 +160,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.5/site-packages/pandas/io/sql.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-249">
-          <caret line="255" column="4" selection-start-line="255" selection-start-column="4" selection-end-line="255" selection-end-column="4" />
+        <state relative-caret-position="192">
+          <caret line="1444" selection-start-line="1444" selection-end-line="1444" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/state_logger.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-105">
-          <caret line="8" column="36" lean-forward="true" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+        <state relative-caret-position="457">
+          <caret line="135" column="57" selection-start-line="135" selection-start-column="57" selection-end-line="135" selection-end-column="57" />
           <folding>
             <element signature="e#24#38#0" expanded="true" />
           </folding>
