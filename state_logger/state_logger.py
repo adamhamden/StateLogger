@@ -62,53 +62,43 @@ class StateLogger:
 
         self._write('FATAL', data, True)
 
-    def display_in_bound_data(self, time1, time2):
+    def get_in_bound_data(self, time1, time2):
 
         if time1 > time2:
             return
 
         self.cursor.execute("SELECT * FROM log WHERE timestamp > ? AND timestamp < ?", (str(time1), str(time2)))
         list_of_matches = self.cursor.fetchall()
-        self._print_list_of_matches(list_of_matches)
+        return list_of_matches
 
-    def display_debug(self):
-
-        self.cursor.execute("SELECT * FROM log WHERE log_level == 'DEBUG'")
-        list_of_matches = self.cursor.fetchall()
-        self._print_list_of_matches(list_of_matches)
-
-    def display_info(self):
-
-        self.cursor.execute("SELECT * FROM log WHERE log_level == 'INFO'")
-        list_of_matches = self.cursor.fetchall()
-        self._print_list_of_matches(list_of_matches)
-
-    def display_warn(self):
-
-        self.cursor.execute("SELECT * FROM log WHERE log_level == 'WARN'")
-        list_of_matches = self.cursor.fetchall()
-        self._print_list_of_matches(list_of_matches)
-
-    def display_error(self):
-
-        self.cursor.execute("SELECT * FROM log WHERE log_level == 'ERROR'")
-        list_of_matches = self.cursor.fetchall()
-        self._print_list_of_matches(list_of_matches)
-
-    def display_fatal(self):
-
-        self.cursor.execute("SELECT * FROM log WHERE log_level == 'FATAL'")
-        list_of_matches = self.cursor.fetchall()
-        self._print_list_of_matches(list_of_matches)
-
-    def display_custom_condition(self, condition):
+    def get_custom_condition(self, condition):
 
         execute_statement = "SELECT * FROM log WHERE " + condition
         self.cursor.execute(execute_statement)
         list_of_matches = self.cursor.fetchall()
-        self._print_list_of_matches(list_of_matches)
+        return list_of_matches
 
-    def _print_list_of_matches(self, list_of_matches):
+    def generate_pandas_data_frame_from_condition(self, condition):
+
+        data_frame = pd.read_sql_query("SELECT * FROM log WHERE %s" % condition, self.connection)
+        return data_frame
+
+    def generate_pandas_data_frame_from_list(self, list_of_matches):
+
+        data_frame = pd.DataFrame(list_of_matches)
+        return data_frame
+
+    def display_in_bound_data(self, time1, time2):
+
+        list_of_matches = self.get_in_bound_data(time1, time2)
+        self.print_list_of_matches(list_of_matches)
+
+    def display_custom_condition(self, condition):
+
+        list_of_matches = self.get_custom_condition(condition)
+        self.print_list_of_matches(list_of_matches)
+
+    def print_list_of_matches(self, list_of_matches):
 
         self.cursor.execute("PRAGMA table_info(log)")
         pragma_list = self.cursor.fetchall()
@@ -122,18 +112,12 @@ class StateLogger:
 
         print(x)
 
-    def _generate_pandas_data_frame(self, condition):
-
-        data_frame = pd.read_sql_query("SELECT * FROM log WHERE %s" % condition, self.connection)
-        return data_frame
-
 
 if __name__ == "__main__":
 
     logger = StateLogger(4,'robot-4_1565195429906824448.db3')
     logger.info(2346.4655855)
     logger.fatal('this is a fatal message')
-    logger.display_in_bound_data(10000,9999999999999999999)
-    logger.display_fatal()
-    logger.display_custom_condition("1==1")
-    print(logger._generate_pandas_data_frame("data_type != 'str'"))
+    list = logger.get_custom_condition("1==1")
+    df = logger.generate_pandas_data_frame_from_list(list)
+    print(df)
