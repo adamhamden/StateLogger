@@ -65,7 +65,7 @@ class StateLogger:
     def get_in_bound_data(self, time1, time2):
 
         if time1 > time2:
-            return
+            return []
 
         self.cursor.execute("SELECT * FROM log WHERE timestamp > ? AND timestamp < ?", (str(time1), str(time2)))
         list_of_matches = self.cursor.fetchall()
