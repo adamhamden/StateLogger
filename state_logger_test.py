@@ -14,7 +14,7 @@ class TestStateLogger(unittest.TestCase):
         logger.error("This is an error message")
         logger.fatal('This is a fatal message')
 
-        all_rows_list = logger.get_custom_condition("1==1")
+        all_rows_list = logger.get_query("1==1")
 
         self.assertEqual(all_rows_list[0][4], "This is an debug message")
         self.assertEqual(all_rows_list[1][4], "This is an info message")
@@ -87,7 +87,7 @@ class TestStateLogger(unittest.TestCase):
         logger.error(4)
         logger.fatal(5)
 
-        list_of_matches = logger.get_custom_condition("1==1")
+        list_of_matches = logger.get_query("1==1")
 
         self.assertEqual(list_of_matches[0][4], 1)
         self.assertEqual(list_of_matches[1][4], 2)
@@ -95,7 +95,7 @@ class TestStateLogger(unittest.TestCase):
         self.assertEqual(list_of_matches[3][4], 4)
         self.assertEqual(list_of_matches[4][4], 5)
 
-        list_of_matches = logger.get_custom_condition("1==0")
+        list_of_matches = logger.get_query("1==0")
 
         self.assertEqual(list_of_matches, [])
 
@@ -109,6 +109,6 @@ class TestStateLogger(unittest.TestCase):
         logger.fatal(5)
 
 
-        df = logger.generate_pandas_data_frame_from_condition("1==1")
+        df = logger.get_pandas_data_frame_from_query("1==1")
 
         self.assertEqual(df["data"].mean(), 3)
