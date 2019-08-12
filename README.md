@@ -2,28 +2,37 @@
 
 Creates and updates a state logging database.
 
-This program allows you to log information to multiple levels in a database file, extract subsets based on certain condition, as well as converting such selections in pandas dataframes.
+This program allows you to log information to different topics stored in a database file, extract subsets based on certain condition, as well as converting such selections into pandas dataframes.
 
 ## Example 
 
+1. Create a config.yml file in the home directory that mirrors the following
+
+        sql_database:
+          robot_id: 1
+          database_name: some_database_name.db3
+          keep_local_copy: True
+
 1. Create the state logger object and give it a unique id and a database to write to (if left blank, one will automatically be created)
 
-             logger = StateLogger(4,'robot-4_database1.db3')
-2. Add messages of different type to the log
+             logger = StateLogger()
+1. Add a topic and its respective data type
+             
+             logger.add_topic('Age', 'int')
+2. Add integer message with the Age topic and allow for local backup
             
-            logger.info(2346.4655855)
-            logger.fatal('this is a fatal message')
+            logger.write('Age', 2346, True)
 3. Generate a list of rows that match a custom condition
 
-            list_of_matches = logger.get_custom_condition("1==1")
+            query = logger.get("1==1")
     
 4. Generate a pandas dataframe out of the list of matches
     
-            df = logger.generate_pandas_data_frame_from_list(list_of_matches)
+            df = query.get()
     
 5. Display the list of matches
 
-            logger.print_list_of_matches(list_of_matches)
+            print(query)
             
 ## Run instructions
 > Note, only tested with Python 3
