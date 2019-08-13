@@ -38,7 +38,7 @@ class StateLogger:
 
     def __init__(self):
 
-        with open("../config.yml", 'r') as ymlfile:
+        with open("config.yml", 'r') as ymlfile:
             cfg = yaml.safe_load(ymlfile)
 
         self.robot_id = int(cfg["sql_database"]["robot_id"])
@@ -174,7 +174,7 @@ class StateLogger:
         self.cursor.execute(execute_statement)
         list_of_mismatched_types = self.cursor.fetchall()
         if len(list_of_mismatched_types) != 0:
-            print("Warning, there are mismatched data types that satisfy this query!")
+            print("\nWarning, there are mismatched data types that satisfy this query!")
 
         self.cursor.execute("PRAGMA table_info(log)")
         pragma_list = self.cursor.fetchall()
@@ -191,18 +191,8 @@ if __name__ == "__main__":
     logger.add_topic('ages', 'int')
     logger.write('age', 12345, True)
     logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
-    logger.write('ages', 12345, True)
     logger.write('ages', 'ummmm', True)
-    logger.write('ages', 12345, True)
+    logger.write('age', '12345', False)
 
     query = logger.get_query("1==1")
     print(query)

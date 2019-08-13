@@ -1,114 +1,56 @@
 import state_logger.state_logger as sl
 import unittest
 import time
-
+import os
 
 class TestStateLogger(unittest.TestCase):
 
-    def test_write_function(self):
-        logger = sl.StateLogger(1)
+    def __del__(self):
+        os.system('rm *.db3')
 
-        logger.debug("This is an debug message")
-        logger.info("This is an info message")
-        logger.warn("This is a warning message")
-        logger.error("This is an error message")
-        logger.fatal('This is a fatal message')
+    def test_add_new_topic(self):
+        logger = sl.StateLogger()
 
-        all_rows_list = logger.get_query("1==1")
+        try:
+            logger.add_topic('Age', 'int')
+            logger.add_topic('Name', 'string')
+            logger.add_topic('Balance', 'float')
+        except:
+            self.fail()
 
-        self.assertEqual(all_rows_list[0][4], "This is an debug message")
-        self.assertEqual(all_rows_list[1][4], "This is an info message")
-        self.assertEqual(all_rows_list[2][4], "This is a warning message")
-        self.assertEqual(all_rows_list[3][4], "This is an error message")
-        self.assertEqual(all_rows_list[4][4], "This is a fatal message")
+    def test_add_duplicate_topic(self):
+        logger = sl.StateLogger()
 
-    def test_get_in_bound_data_nominal(self):
-        logger = sl.StateLogger(2)
+        logger.add_topic('topic', 'int')
+        with self.assertRaises(ValueError):
+            logger.add_topic('topic', 'int')
 
-        start_time = int(1000000000*time.time())
+    def test_write_to_valid_topic(self):
 
-        logger.debug(1)
-        logger.info(2)
-        logger.warn(3)
-        logger.error(4)
-        logger.fatal(5)
+        logger = sl.StateLogger()
+        logger.add_topic('topic_int', 'int')
+        logger.add_topic('topic_string', 'str')
 
-        end_time = int(1000000000*time.time())
+        logger.write('topic_int', 1234)
+        logger.write('topic_string', "Hello, world!")
 
-        list_of_in_bound_data = logger.get_in_bound_data(start_time, end_time)
+        test_query = logger.get_query("1==1")
+        data = test_query.get()
 
-        self.assertEqual(list_of_in_bound_data[0][4], 1)
-        self.assertEqual(list_of_in_bound_data[1][4], 2)
-        self.assertEqual(list_of_in_bound_data[2][4], 3)
-        self.assertEqual(list_of_in_bound_data[3][4], 4)
-        self.assertEqual(list_of_in_bound_data[4][4], 5)
-
-    def test_get_in_bound_data_boundary(self):
-        logger = sl.StateLogger(2)
-
-        start_time = int(1000000000 * time.time())
-
-        logger.debug(1)
-
-        end_time = int(1000000000 * time.time())
-
-        logger.info(2)
-        logger.warn(3)
-        logger.error(4)
-        logger.fatal(5)
-
-        list_of_in_bound_data = logger.get_in_bound_data(start_time, end_time)
-
-        self.assertEqual(list_of_in_bound_data[0][4], 1)
-
-    def test_get_in_bound_data_off_nominal(self):
-        logger = sl.StateLogger(2)
-
-        start_time = int(1000000000*time.time())
-
-        logger.debug(1)
-        logger.info(2)
-        logger.warn(3)
-        logger.error(4)
-        logger.fatal(5)
-
-        end_time = int(1000000000*time.time())
-
-        list_of_in_bound_data = logger.get_in_bound_data(end_time, start_time)
-
-        self.assertEqual(list_of_in_bound_data, [])
-
-    def test_get_custom_condition(self):
-        logger = sl.StateLogger(2)
-
-        logger.debug(1)
-        logger.info(2)
-        logger.warn(3)
-        logger.error(4)
-        logger.fatal(5)
-
-        list_of_matches = logger.get_query("1==1")
-
-        self.assertEqual(list_of_matches[0][4], 1)
-        self.assertEqual(list_of_matches[1][4], 2)
-        self.assertEqual(list_of_matches[2][4], 3)
-        self.assertEqual(list_of_matches[3][4], 4)
-        self.assertEqual(list_of_matches[4][4], 5)
-
-        list_of_matches = logger.get_query("1==0")
-
-        self.assertEqual(list_of_matches, [])
-
-    def test_generate_pandas_dataframe(self):
-        logger = sl.StateLogger(2)
-
-        logger.debug(1)
-        logger.info(2)
-        logger.warn(3)
-        logger.error(4)
-        logger.fatal(5)
+        self.assertEqual(data.loc[0, 3], 1234)
+        self.assertEqual(data.loc[1, 3],  "Hello, world!")
 
 
-        df = logger.get_pandas_data_frame_from_query("1==1")
+    def test_write_incorrect_type(self):
 
-        self.assertEqual(df["data"].mean(), 3)
+        logger = sl.StateLogger()
+        logger.add_topic('topic_int', 'int')
+        logger.add_topic('topic_string', 'string')
+
+        logger.write('topic_int', "Hello, world!")
+        logger.write('topic_string', "Hello, world!")
+
+        test_query = logger.get_query("1==1")
+        data = test_query.get_mistmatched_types()
+
+        self.assertEqual(data.loc[0, 3],  "Hello, world!")
